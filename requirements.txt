@@ -1,0 +1,7 @@
+Flask-JWT-Extended
+Flask-RESTful
+Flask-SQLAlchemy
+python-dotenv
+requests
+passlib
+psycopg2
