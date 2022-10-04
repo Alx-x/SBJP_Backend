@@ -56,7 +56,7 @@ class Sensor(Resource):
     @jwt_required()
     def post(self, name = None):
         APIDATA =['Wroclaw-API', 'Poznan-API', 'Bydgoszcz-API',
-                    'Torun-API', 'Krakow-API', "Lodz-API",
+                    'Torun-API', 'Krakow-API', 'Lodz-API',
                     'Warsaw-API', 'Bialystok-API', 'Gdansk-API',
                     'Katowice-API', 'Rzeszow-API', 'Kielce-API',
                     'Olsztyn-API', 'Szczecin-API'
