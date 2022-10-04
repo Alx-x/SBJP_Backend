@@ -25,8 +25,8 @@ def create_tables():
 jwt = JWTManager(app)
 
 @jwt.additional_claims_loader
-def add_claims_to_jwt(identity):  # Remember identity is what we define when creating the access token
-    if identity == 1:   # instead of hard-coding, we should read from a config file or database to get a list of admins instead
+def add_claims_to_jwt(identity):  
+    if identity == 1: 
         return {'is_admin': True}
     return {'is_admin': False}
 
