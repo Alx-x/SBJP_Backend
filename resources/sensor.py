@@ -6,11 +6,15 @@ from flask_jwt_extended import (
 )
 from models.sensor import SensorModel
 from datetime import datetime
+from secrets import token_urlsafe
 
 
 
 class Sensor(Resource):
     parser = reqparse.RequestParser()
+    parser.add_argument(
+        "api_key", type=str, required = False, help="MISSING: Unique name of your sensor."
+    )
     parser.add_argument(
         "city", type=str, required = False, help="MISSING: The city where the sensor is located."
     )
@@ -48,13 +52,15 @@ class Sensor(Resource):
 
     @jwt_required()
     def get(self, name):
+        if name == None:
+            return {"message":"Your sensor have no name"}, 404
         item = SensorModel.find_by_name(name)
         if item:
             return item.json()
         return {"message": "Item not found"}, 404
 
     @jwt_required()
-    def post(self, name = None):
+    def post(self, name):
         APIDATA =['Wroclaw-API', 'Poznan-API', 'Bydgoszcz-API',
                     'Torun-API', 'Krakow-API', 'Lodz-API',
                     'Warsaw-API', 'Bialystok-API', 'Gdansk-API',
@@ -70,13 +76,17 @@ class Sensor(Resource):
 
         item = SensorModel(name, **data)
         item.timestamp = str(datetime.now())
+        while True:
+            item.api_key = token_urlsafe(16)
+            if not (SensorModel.find_by_api_key(item.api_key)):
+                break
 
         try:
             item.save_to_db()
         except:
             return {"message": "An error occurred while inserting the item."}, 500
 
-        return item.json(), 201
+        return {"api_key": item.api_key}, 201
 
     @jwt_required()
     def delete(self, name):
@@ -90,31 +100,40 @@ class Sensor(Resource):
             return {"message": "Item deleted."}
         return {"message": "Item not found."}, 404
 
-    @jwt_required()
+    #@jwt_required()
     def put(self, name):
         data = Sensor.parser.parse_args()
 
         item = SensorModel.find_by_name(name)
 
         if item:
-            item.city = data["city"]
-            item.location_x = data["location_x"]
-            item.location_y = data["location_y"]
-            item.timestamp = str(datetime.now())
-            item.aqius = data["aqius"]
-            item.main = data["main"]
-            item.temperature = data["temperature"]
-            item.pressure = data["pressure"]
-            item.humidity = data["humidity"]
-            item.wind_spd = data["wind_spd"]
-            item.wind_dir = data["wind_dir"]
+            if(data["api_key"]==item.api_key):
+                item.city = data["city"]
+                item.location_x = data["location_x"]
+                item.location_y = data["location_y"]
+                item.timestamp = str(datetime.now())
+                item.aqius = data["aqius"]
+                item.main = data["main"]
+                item.temperature = data["temperature"]
+                item.pressure = data["pressure"]
+                item.humidity = data["humidity"]
+                item.wind_spd = data["wind_spd"]
+                item.wind_dir = data["wind_dir"]
+            else:
+                return {"message": "Api key is not valid."}, 404
         else:
             item = SensorModel(name, **data)
             item.timestamp = str(datetime.now())
-
+            while True:
+                item.api_key = token_urlsafe(16)
+                if not (SensorModel.find_by_api_key(item.api_key)):
+                    break
+                
         item.save_to_db()
 
-        return item.json()
+        return item.json() 
+
+        
 
 class SensorList(Resource):
     @jwt_required()

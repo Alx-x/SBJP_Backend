@@ -6,6 +6,7 @@ class SensorModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True)
+    api_key = db.Column(db.String(80), unique=True)
 
     city = db.Column(db.String(80))
     location_x = db.Column(db.Float(precision=10))
@@ -28,8 +29,9 @@ class SensorModel(db.Model):
     wind_spd = db.Column(db.Float(precision=2)) #speed m/s
     wind_dir = db.Column(db.Integer) #wind direction, as an angle of 360° (N=0, E=90, S=180, W=270)
     
-    def __init__(self, name, city, location_x, location_y, timestamp, aqius, main, temperature, pressure, humidity, wind_spd, wind_dir):
+    def __init__(self, name, api_key, city, location_x, location_y, timestamp, aqius, main, temperature, pressure, humidity, wind_spd, wind_dir):
         self.name = name
+        self.api_key = None
         self.city = city
         self.location_x = location_x
         self.location_y = location_y
@@ -66,6 +68,10 @@ class SensorModel(db.Model):
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
+
+    @classmethod
+    def find_by_api_key(cls, api_key):
+        return cls.query.filter_by(api_key=api_key).first()
 
     @classmethod
     def find_all(cls):

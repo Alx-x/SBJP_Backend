@@ -3,5 +3,6 @@ Flask-RESTful
 Flask-SQLAlchemy
 python-dotenv
 requests
+secrets
 passlib
 psycopg2
