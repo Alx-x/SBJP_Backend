@@ -134,6 +134,7 @@ class SensorList(Resource):
                 "name": item.name,
                 "city": item.city,
                 "aqius": item.aqius,
+                "main": item.main
                 }
             items.append(template)
         return{
