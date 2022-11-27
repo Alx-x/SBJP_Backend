@@ -11,7 +11,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 load_dotenv()
-cors = CORS(app, origins="*.vercel.app")
+cors = CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
