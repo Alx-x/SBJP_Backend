@@ -44,13 +44,13 @@ class User(Resource):
             return {"message": "User Not Found"}, 404
         return user.json(), 200
 
-    # @classmethod
-    # def delete(cls, user_id: int):
-    #     user = UserModel.find_by_id(user_id)
-    #     if not user:
-    #         return {"message": "User Not Found"}, 404
-    #     user.delete_from_db()
-    #     return {"message": "User deleted."}, 200
+    @classmethod
+    def delete(cls, user_id: int):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return {"message": "User Not Found"}, 404
+        user.delete_from_db()
+        return {"message": "User deleted."}, 200
 
 
 class UserLogin(Resource):
@@ -70,7 +70,7 @@ class UserLogin(Resource):
 class UserLogout(Resource):
     @jwt_required()
     def post(self):
-        jti = get_jwt()["jti"]  # jti is "JWT ID", a unique identifier for a JWT.
+        jti = get_jwt()["jti"]
         BLACKLIST.add(jti)
         return {"message": "Successfully logged out"}, 200
 

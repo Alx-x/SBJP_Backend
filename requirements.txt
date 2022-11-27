@@ -6,3 +6,4 @@ passlib==1.7.4
 psycopg2-binary
 gunicorn
 python-dotenv
+flask-cors

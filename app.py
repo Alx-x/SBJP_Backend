@@ -7,9 +7,11 @@ from db import db
 from blacklist import BLACKLIST
 from resources.user import UserRegister, User, UserLogin, TokenRefresh, UserLogout
 from resources.sensor import Sensor, SensorList
+from flask_cors import CORS
 
 app = Flask(__name__)
 load_dotenv()
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
