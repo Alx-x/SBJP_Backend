@@ -43,7 +43,7 @@ api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(UserLogout, '/logout')
 
 db.init_app(app)
-cors.init_app()
+cors.init_app(app)
 
 if __name__ == '__main__':
     app.run()
