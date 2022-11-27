@@ -127,12 +127,15 @@ class SensorList(Resource):
     @jwt_required()
     def get(self):
        # items = [item.json() for item in SensorModel.find_all()]
-        items = []  
-        for item in SensorModel.find_all():
-             items.append(item.id)
-             items.append(item.name)
-             items.append(item.city)
-             items.append(item.aqius)
+        items = []
+        for item in SensorModel.find_all(): 
+            template={
+                "id": item.id,
+                "name": item.name,
+                "city": item.city,
+                "aqius": item.aqius,
+                }
+            items.append(template)
         return{
             "sensors": items
         }, 200
