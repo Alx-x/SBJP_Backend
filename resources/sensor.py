@@ -134,5 +134,5 @@ class SensorList(Resource):
              items.append(item.city)
              items.append(item.aqius)
         return{
-            "sensors": items.json()
+            "sensors": items
         }, 200
