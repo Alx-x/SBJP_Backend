@@ -1,10 +1,8 @@
 import os
-
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
-
 from db import db
 from blacklist import BLACKLIST
 from resources.user import UserRegister, User, UserLogin, TokenRefresh, UserLogout
@@ -42,9 +40,10 @@ api.add_resource(UserLogin, '/login')
 api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(UserLogout, '/logout')
 
+db.init_app(app)
+
 if __name__ == '__main__':
-    db.init_app(app)
-    app.run(port=5000, debug=False)
+    app.run(port=5000, debug=True)
 
 
 

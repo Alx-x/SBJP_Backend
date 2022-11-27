@@ -28,7 +28,7 @@ class Sensor(Resource):
         "timestamp", type=str, required = False, help="MISSING: Time the data was sent."
     )
     parser.add_argument(
-        "aqius", type=int, required = True, help="MISSING: AQI value based on US EPA standard."
+        "aqius", type=int, required = False, help="MISSING: AQI value based on US EPA standard."
     )
     parser.add_argument(
         "main", type=str, required = False, help="MISSING: Main pollutant for AQI."
@@ -61,13 +61,7 @@ class Sensor(Resource):
 
     @jwt_required()
     def post(self, name):
-        APIDATA =['Wroclaw-API', 'Poznan-API', 'Bydgoszcz-API',
-                    'Torun-API', 'Krakow-API', 'Lodz-API',
-                    'Warsaw-API', 'Bialystok-API', 'Gdansk-API',
-                    'Katowice-API', 'Rzeszow-API', 'Kielce-API',
-                    'Olsztyn-API', 'Szczecin-API'
-                    ]
-        if SensorModel.find_by_name(name) or name in APIDATA :
+        if SensorModel.find_by_name(name) :
             return{
                 "message": "A sensor with name '{}' already exists.".format(name)
             }, 400
@@ -121,16 +115,10 @@ class Sensor(Resource):
                 item.wind_dir = data["wind_dir"]
             else:
                 return {"message": "Api key is not valid."}, 404
+               
         else:
-            item = SensorModel(name, **data)
-            item.timestamp = str(datetime.now())
-            while True:
-                item.api_key = token_urlsafe(16)
-                if not (SensorModel.find_by_api_key(item.api_key)):
-                    break
-                
+            return {"message": "No item found."}, 404
         item.save_to_db()
-
         return item.json() 
 
         
