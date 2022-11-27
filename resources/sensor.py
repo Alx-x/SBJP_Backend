@@ -54,7 +54,7 @@ class Sensor(Resource):
     def get(self, name):
         if name == None:
             return {"message":"Your sensor have no name"}, 404
-        item = SensorModel.find_by_name(name)
+        item = SensorModel.find_by_id(name)
         if item:
             return item.json()
         return {"message": "Item not found"}, 404
@@ -122,11 +122,17 @@ class Sensor(Resource):
         return item.json() 
 
         
-
+# ID name city AQUIS
 class SensorList(Resource):
     @jwt_required()
     def get(self):
-        items = [item.json() for item in SensorModel.find_all()]
+       # items = [item.json() for item in SensorModel.find_all()]
+        items = []  
+        for item in SensorModel.find_all():
+             items.append(item.id)
+             items.append(item.name)
+             items.append(item.city)
+             items.append(item.aqius)
         return{
-            "sensors": items
+            "sensors": items.json()
         }, 200
