@@ -8,6 +8,7 @@ from blacklist import BLACKLIST
 from resources.user import UserRegister, User, UserLogin, TokenRefresh, UserLogout
 from resources.sensor import Sensor, SensorList
 from flask_cors import CORS
+from datetime import timedelta
 
 app = Flask(__name__)
 load_dotenv()
@@ -15,6 +16,7 @@ cors = CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.secret_key = os.getenv("SECRET_KEY")  
 api = Api(app)
 
