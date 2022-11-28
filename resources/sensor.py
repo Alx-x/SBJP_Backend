@@ -133,6 +133,8 @@ class SensorList(Resource):
                 "id": item.id,
                 "name": item.name,
                 "city": item.city,
+                'location_x': item.location_x,
+                'location_y': item.location_y,
                 "aqius": item.aqius,
                 "main": item.main
                 }
