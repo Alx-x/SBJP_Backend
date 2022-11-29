@@ -121,8 +121,7 @@ class Sensor(Resource):
         item.save_to_db()
         return item.json() 
 
-        
-# ID name city AQUIS
+
 class SensorList(Resource):
     @jwt_required()
     def get(self):
