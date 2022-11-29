@@ -69,7 +69,7 @@ class Sensor(Resource):
         data = Sensor.parser.parse_args()
 
         item = SensorModel(name, **data)
-        item.timestamp = str(datetime.now())
+        item.timestamp = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         while True:
             item.api_key = token_urlsafe(16)
             if not (SensorModel.find_by_api_key(item.api_key)):
@@ -101,21 +101,24 @@ class Sensor(Resource):
         item = SensorModel.find_by_name(name)
 
         if item:
-            if(data["api_key"]==item.api_key):
-                item.city = data["city"]
-                item.location_x = data["location_x"]
-                item.location_y = data["location_y"]
-                item.timestamp = str(datetime.now())
-                item.aqius = data["aqius"]
-                item.main = data["main"]
-                item.temperature = data["temperature"]
-                item.pressure = data["pressure"]
-                item.humidity = data["humidity"]
-                item.wind_spd = data["wind_spd"]
-                item.wind_dir = data["wind_dir"]
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if now - item.timestamp > 60:
+                if(data["api_key"]==item.api_key):
+                    item.city = data["city"]
+                    item.location_x = data["location_x"]
+                    item.location_y = data["location_y"]
+                    item.timestamp = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    item.aqius = data["aqius"]
+                    item.main = data["main"]
+                    item.temperature = data["temperature"]
+                    item.pressure = data["pressure"]
+                    item.humidity = data["humidity"]
+                    item.wind_spd = data["wind_spd"]
+                    item.wind_dir = data["wind_dir"]
+                else:
+                    return {"message": "Api key is not valid."}, 404
             else:
-                return {"message": "Api key is not valid."}, 404
-               
+                return {"message": "You are sending data too fast."}, 404  
         else:
             return {"message": "No item found."}, 404
         item.save_to_db()
