@@ -104,7 +104,8 @@ class Sensor(Resource):
             now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             now = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
             last = datetime.strptime(item.timestamp, "%Y-%m-%d %H:%M:%S")
-            if now - last > 60:
+            passed = now - last
+            if int(passed.total_seconds()) > 60:
                 if(data["api_key"]==item.api_key):
                     item.city = data["city"]
                     item.location_x = data["location_x"]
