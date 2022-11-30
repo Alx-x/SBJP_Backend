@@ -102,6 +102,7 @@ class Sensor(Resource):
 
         if item:
             now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            now = datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
             last = datetime.strptime(item.timestamp, "%Y-%m-%d %H:%M:%S")
             if now - last > 60:
                 if(data["api_key"]==item.api_key):
