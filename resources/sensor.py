@@ -19,10 +19,10 @@ class Sensor(Resource):
         "city", type=str, required = False, help="MISSING: The city where the sensor is located."
     )
     parser.add_argument(
-        "location_x", type=float, required = True, help="MISSING: First of two coordinates."
+        "location_x", type=float, required = False, help="MISSING: First of two coordinates."
     )
     parser.add_argument(
-        "location_y", type=float, required = True, help="MISSING: Second of two coordinates."
+        "location_y", type=float, required = False, help="MISSING: Second of two coordinates."
     )
     parser.add_argument(
         "timestamp", type=str, required = False, help="MISSING: Time the data was sent."
