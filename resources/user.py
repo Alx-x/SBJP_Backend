@@ -46,11 +46,15 @@ class User(Resource):
 
     @classmethod
     def delete(cls, user_id: int):
-        user = UserModel.find_by_id(user_id)
-        if not user:
-            return {"message": "User Not Found"}, 404
-        user.delete_from_db()
-        return {"message": "User deleted."}, 200
+        claims = get_jwt()
+        if not claims['is_admin']:
+            return {"message": "Admin privilege required."}, 401
+        else:
+            user = UserModel.find_by_id(user_id)
+            if not user:
+                return {"message": "User Not Found"}, 404
+            user.delete_from_db()
+            return {"message": "User deleted."}, 200
 
 
 class UserLogin(Resource):
@@ -64,7 +68,7 @@ class UserLogin(Resource):
             refresh_token = create_refresh_token(user.id)
             return {"access_token": access_token, "refresh_token": refresh_token}, 200
 
-        return {"message": "Invalid Credentials!"}, 401
+        return {"message": "Wrong username or password!"}, 401
 
 
 class UserLogout(Resource):

@@ -87,12 +87,12 @@ class Sensor(Resource):
         claims = get_jwt()
         if not claims['is_admin']:
             return {"message": "Admin privilege required."}, 401
-
-        item = SensorModel.find_by_name(name)
-        if item:
-            item.delete_from_db()
-            return {"message": "Item deleted."}
-        return {"message": "Item not found."}, 404
+        else:
+            item = SensorModel.find_by_name(name)
+            if item:
+                item.delete_from_db()
+                return {"message": "Item deleted."}
+            return {"message": "Item not found."}, 404
 
     #@jwt_required()
     def put(self, name):
